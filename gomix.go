@@ -1,8 +1,6 @@
 package gomix
 
-import (
-	"helpers/parse"
-)
+import "parse"
 
 // TestingHere - First test helper function
 func TestingHere() string {
