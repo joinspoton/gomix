@@ -1,7 +1,7 @@
 package gomix
 
 import (
-	"./helpers/parse"
+	"helpers/parse"
 )
 
 // TestingHere - First test helper function
