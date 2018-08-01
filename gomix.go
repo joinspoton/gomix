@@ -1,6 +1,10 @@
 package gomix
 
+import (
+	"./helpers/parse"
+)
+
 // TestingHere - First test helper function
 func TestingHere() string {
-	return "TESTING HERER"
+	return parse.LambdaRequestBody()
 }
