@@ -3,6 +3,7 @@ package parse
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"strings"
 
@@ -17,6 +18,7 @@ var ErrParseRequestBody = errors.New("ERROR_PARSE_REQUEST_BODY")
 
 // LambdaRequestBody - Parse a lambda http POST request body
 func LambdaRequestBody(request events.APIGatewayProxyRequest) (BodyType, error) {
+	fmt.Println(request.Body)
 	decoder := json.NewDecoder(strings.NewReader(request.Body))
 	var parsedBody BodyType
 	for {
@@ -28,3 +30,14 @@ func LambdaRequestBody(request events.APIGatewayProxyRequest) (BodyType, error) 
 	}
 	return parsedBody, nil
 }
+
+// decoder := json.NewDecoder(strings.NewReader(request.Body))
+// var loadPoint LoadPoint
+// for {
+// 	if err := decoder.Decode(&loadPoint); err == io.EOF {
+// 		break
+// 	} else if err != nil {
+// 		return LoadPoint{}, err
+// 	}
+// }
+// return loadPoint, nil

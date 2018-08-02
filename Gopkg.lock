@@ -8,12 +8,6 @@
   version = "v1.2.0"
 
 [[projects]]
-  name = "github.com/imdario/mergo"
-  packages = ["."]
-  revision = "9f23e2d6bd2a77f959b2bf6acdbefd708a83a4a4"
-  version = "v0.3.6"
-
-[[projects]]
   name = "github.com/influxdata/influxdb"
   packages = [
     "client/v2",
@@ -26,6 +20,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "307c116dbef6200b85bad197eec08960663e8d0c96321f872a0232b7b5a8f5e6"
+  inputs-digest = "0fcc8ab6db67277a96851725893e6fad794cccdfbb8c59f6fbee1149a1aacdef"
   solver-name = "gps-cdcl"
   solver-version = 1
