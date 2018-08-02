@@ -13,8 +13,8 @@ import (
 
 // BodyType - Type of the request body
 type BodyType struct {
-	Site     string
-	Calendar string
+	Site     string `json:"Site"`
+	Calendar string `json:"Calendar"`
 }
 
 // ErrParseRequestBody - error when parsing request body
