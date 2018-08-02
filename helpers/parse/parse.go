@@ -11,7 +11,10 @@ import (
 )
 
 // BodyType - Type of the request body
-type BodyType struct{}
+type BodyType struct {
+	Site     string
+	Calendar string
+}
 
 // ErrParseRequestBody - error when parsing request body
 var ErrParseRequestBody = errors.New("ERROR_PARSE_REQUEST_BODY")
