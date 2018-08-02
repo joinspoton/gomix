@@ -10,20 +10,14 @@ import (
 	"github.com/aws/aws-lambda-go/events"
 )
 
-// BodyType - Type of the request body
-type BodyType struct {
-	Site     string
-	Calendar string
-}
-
 // ErrParseRequestBody - error when parsing request body
 var ErrParseRequestBody = errors.New("ERROR_PARSE_REQUEST_BODY")
 
 // LambdaRequestBody - Parse a lambda http POST request body
-func LambdaRequestBody(request events.APIGatewayProxyRequest) (BodyType, error) {
+func LambdaRequestBody(request events.APIGatewayProxyRequest) (map[string]string, error) {
 	fmt.Println(request.Body)
 	decoder := json.NewDecoder(strings.NewReader(request.Body))
-	var parsedBody BodyType
+	var parsedBody map[string]string
 	for {
 		if err := decoder.Decode(&parsedBody); err == io.EOF {
 			break
@@ -31,7 +25,6 @@ func LambdaRequestBody(request events.APIGatewayProxyRequest) (BodyType, error) 
 			return parsedBody, ErrParseRequestBody
 		}
 	}
-	fmt.Println(parsedBody)
 	return parsedBody, nil
 }
 
