@@ -28,6 +28,7 @@ func LambdaRequestBody(request events.APIGatewayProxyRequest) (BodyType, error) 
 			return parsedBody, ErrParseRequestBody
 		}
 	}
+	fmt.Println(parsedBody)
 	return parsedBody, nil
 }
 
