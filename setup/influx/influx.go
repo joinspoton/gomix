@@ -1,4 +1,4 @@
-package gomix
+package influx
 
 import (
 	"errors"
@@ -8,8 +8,8 @@ import (
 	"github.com/influxdata/influxdb/client/v2"
 )
 
-// InfluxConfigType - Required to connect to influx db
-type InfluxConfigType struct {
+// ConfigType - Required to connect to influx db
+type ConfigType struct {
 	host     string
 	username string
 	password string
@@ -20,7 +20,7 @@ var ErrInfluxConnection = errors.New("INFLUX_FAILED_TO_CONNECT")
 
 // Connect - chodie
 func Connect(influxConfig struct{}) (clnt client.Client, err error) {
-	config := InfluxConfigType{}
+	config := ConfigType{}
 	mergo.Merge(&config, influxConfig)
 	c, err := client.NewHTTPClient(client.HTTPConfig{
 		Addr:     config.host,
