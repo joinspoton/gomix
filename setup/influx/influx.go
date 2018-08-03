@@ -17,7 +17,7 @@ type ConfigType struct {
 // ErrInfluxConnection - Error thrown when connection failes
 var ErrInfluxConnection = errors.New("INFLUX_FAILED_TO_CONNECT")
 
-// Connect - chodie
+// Connect - Create a new InfluxDB connection
 func Connect(host string, username string, password string) (clnt client.Client, err error) {
 	c, err := client.NewHTTPClient(client.HTTPConfig{
 		Addr:     host,
@@ -29,7 +29,6 @@ func Connect(host string, username string, password string) (clnt client.Client,
 		fmt.Println("Host: ", host)
 		fmt.Println("Username: ", username)
 		fmt.Println("Password: ", password)
-		fmt.Println("Unable to connect to influxDB:")
 		return nil, ErrInfluxConnection
 	}
 	return c, nil
