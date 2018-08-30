@@ -9,7 +9,7 @@ import (
 )
 
 // GetConfig - Get config from paramstore
-func GetConfig(key string) ([]string, error) {
+func GetConfig(key string) (string, error) {
 	sess, err := session.NewSessionWithOptions(session.Options{
 		Config:            aws.Config{Region: aws.String("us-west-2")},
 		SharedConfigState: session.SharedConfigEnable,
