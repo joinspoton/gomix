@@ -34,7 +34,7 @@ var (
 
 // QueryMixpanel - hit mixpanel with jql query and return response
 func QueryMixpanel(query JQLQuery) (string, error) {
-	mpSecret, err := paramstore.GetConfig("mixpanel_secret")
+	mpSecret, err := paramstore.GetConfig("/production/mixpanel/secret/b64")
 	if err != nil {
 		return "", ErrorParameterStore
 	}
@@ -54,7 +54,7 @@ func QueryMixpanel(query JQLQuery) (string, error) {
 	data.Add("script", jqlQuery)
 	req, err := http.NewRequest("POST", mpurl, strings.NewReader(data.Encode()))
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("authorization", "Basic "+mpSecret[0])
+	req.Header.Set("authorization", "Basic "+mpSecret)
 	client := &http.Client{}
 	var response string
 	resp, err := client.Do(req)
