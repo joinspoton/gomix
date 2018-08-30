@@ -1,10 +1,13 @@
 package mixpanel
 
 import (
+	"errors"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
+
+	"github.com/joinspoton/gomix/utilities/paramstore"
 )
 
 // TimeInterval - Date range - YYYY-MM-DD
@@ -22,11 +25,19 @@ type JQLQuery struct {
 	OrderBy  string
 }
 
-// mpurl - Mixpanel Query URL
-const mpurl = "https://mixpanel.com/api/2.0/jql"
+var (
+	// mpurl - Mixpanel Query URL
+	mpurl = "https://mixpanel.com/api/2.0/jql"
+	// ErrorParameterStore - Parameter Store Error
+	ErrorParameterStore = errors.New("Unable to get mixpanel secret from AWS paramater store")
+)
 
 // QueryMixpanel - hit mixpanel with jql query and return response
 func QueryMixpanel(query JQLQuery) (string, error) {
+	mpSecret, err := paramstore.GetConfig("/production/mixpanel/secret/b64")
+	if err != nil {
+		return "", ErrorParameterStore
+	}
 	dateRange := "{\"from_date\": \"" + query.Interval.Start + "\", \"to_date\": \"" + query.Interval.End + "\"}"
 	jqlQuery := `
 		function main() {
@@ -43,7 +54,7 @@ func QueryMixpanel(query JQLQuery) (string, error) {
 	data.Add("script", jqlQuery)
 	req, err := http.NewRequest("POST", mpurl, strings.NewReader(data.Encode()))
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("authorization", "Basic ZjUzYjM1N2NlMDE1YWRiNTc0NGU5M2NkY2JkNmE4ZjM=")
+	req.Header.Set("authorization", "Basic "+mpSecret)
 	client := &http.Client{}
 	var response string
 	resp, err := client.Do(req)
