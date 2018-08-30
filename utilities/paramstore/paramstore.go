@@ -1,8 +1,6 @@
 package paramstore
 
 import (
-	"strings"
-
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ssm"
@@ -15,7 +13,7 @@ func GetConfig(key string) (string, error) {
 		SharedConfigState: session.SharedConfigEnable,
 	})
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 	ssmsvc := ssm.New(sess, aws.NewConfig().WithRegion("us-west-2"))
 	keyname := key
@@ -25,6 +23,5 @@ func GetConfig(key string) (string, error) {
 		WithDecryption: &withDecryption,
 	})
 	value := *param.Parameter.Value
-	config := strings.Split(value, ",")
-	return config, nil
+	return value, nil
 }
