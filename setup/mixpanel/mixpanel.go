@@ -2,6 +2,7 @@ package mixpanel
 
 import (
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -20,9 +21,9 @@ type TimeInterval struct {
 type JQLQuery struct {
 	Interval TimeInterval
 	Event    string
-	Filter   string
 	GroupBy  string
 	OrderBy  string
+	Filter   string
 }
 
 var (
@@ -40,15 +41,18 @@ func QueryMixpanel(query JQLQuery) (string, error) {
 	}
 	dateRange := "{\"from_date\": \"" + query.Interval.Start + "\", \"to_date\": \"" + query.Interval.End + "\"}"
 	jqlQuery := `
-		function main() {
-			return Events(params)
-				.filter((event) => (
-					event.name === '` + query.Event + `' ` + query.Filter + `
-				))
-				.groupBy([` + query.GroupBy + `],mixpanel.reducer.count())
-				.sortDesc('value')
-		}
+    function main() {
+      return Events(params)
+        .filter((event) => (
+          event.name === '` + query.Event + `' ` + query.Filter + `
+        ))
+        .groupBy([` + query.GroupBy + `],mixpanel.reducer.count())
+        .sortDesc('value')
+    }
 	`
+	fmt.Println("THE JQL QUERY -------")
+	fmt.Println(jqlQuery)
+
 	data := url.Values{}
 	data.Set("params", dateRange)
 	data.Add("script", jqlQuery)
