@@ -1,17 +1,15 @@
 package postgres
 
 import (
-	"fmt"
-
-	"github.com/jinzhu/gorm"
+	"github.com/go-pg/pg"
 )
 
 // Connect - Create a new PostGreSQL connection
-func Connect(host string, port string, db string, username string, password string) (*gorm.DB, error) {
-	connection := fmt.Sprintf("host=%s port=%s dbname=%s user=%s password=%s", host, port, db, username, password)
-	client, err := gorm.Open("postgres", connection)
-	if err != nil {
-		return nil, fmt.Errorf("Unable to connect to postgres with: %+v", connection)
-	}
-	return client, nil
+func Connect(address string, db string, username string, password string) *pg.DB {
+	return pg.Connect(&pg.Options{
+		Addr:     address,
+		Database: db,
+		User:     username,
+		Password: password,
+	})
 }
