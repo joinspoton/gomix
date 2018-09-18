@@ -8,50 +8,27 @@ import (
 )
 
 // BatchInsert - Since it is not officially supported in the GORM API
-func BatchInsert(db *gorm.DB, objArr []interface{}) error {
-	// If there is no data, nothing to do.
-	if len(objArr) == 0 {
-		return nil
+func BatchInsert(db *gorm.DB, table string, columns []string, data []interface{}) error {
+	cmd := fmt.Sprintf(
+		"INSERT INTO %s(%s) VALUES ",
+		table,
+		strings.Join(columns, ","),
+	)
+
+	var placeholders []string
+	for i := 0; i < len(columns); i++ {
+		placeholders = append(placeholders, "?")
+	}
+	row := fmt.Sprintf("(%s)", strings.Join(placeholders, ","))
+
+	var inserts []string
+	for i := 0; i < len(data)/len(columns); i++ {
+		inserts = append(inserts, row)
 	}
 
-	mainObj := objArr[0]
-	mainScope := db.NewScope(mainObj)
-	mainFields := mainScope.Fields()
-	quoted := make([]string, 0, len(mainFields))
-	for i := range mainFields {
-		// If primary key has blank value (0 for int, "" for string, nil for interface ...), skip it.
-		// If field is ignore field, skip it.
-		if (mainFields[i].IsPrimaryKey && mainFields[i].IsBlank) || (mainFields[i].IsIgnored) {
-			continue
-		}
-		quoted = append(quoted, mainScope.Quote(mainFields[i].DBName))
-	}
+	cmd += strings.Join(inserts, ",")
 
-	placeholdersArr := make([]string, 0, len(objArr))
-
-	for _, obj := range objArr {
-		scope := db.NewScope(obj)
-		fields := scope.Fields()
-		placeholders := make([]string, 0, len(fields))
-		for i := range fields {
-			if (fields[i].IsPrimaryKey && fields[i].IsBlank) || (fields[i].IsIgnored) {
-				continue
-			}
-			placeholders = append(placeholders, scope.AddToVars(fields[i].Field.Interface()))
-		}
-		placeholdersStr := "(" + strings.Join(placeholders, ", ") + ")"
-		placeholdersArr = append(placeholdersArr, placeholdersStr)
-		// add real variables for the replacement of placeholders' '?' letter later.
-		mainScope.SQLVars = append(mainScope.SQLVars, scope.SQLVars...)
-	}
-
-	mainScope.Raw(fmt.Sprintf("INSERT INTO %s (%s) VALUES %s",
-		mainScope.QuotedTableName(),
-		strings.Join(quoted, ", "),
-		strings.Join(placeholdersArr, ", "),
-	))
-
-	if _, err := mainScope.SQLDB().Exec(mainScope.SQL, mainScope.SQLVars...); err != nil {
+	if err := db.Exec(cmd, data...).Error; err != nil {
 		return err
 	}
 	return nil
