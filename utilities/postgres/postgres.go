@@ -29,8 +29,7 @@ func BatchInsert(db *gorm.DB, table string, data []map[string]interface{}) {
 	var wg sync.WaitGroup
 	wg.Add(batches)
 
-	for i := 0; i < len(data); i += 500 * len(headers) {
-
+	for i := 0; i < batches; i++ {
 		go func(i int) {
 			defer wg.Done()
 			stop := i + 500*len(headers)
@@ -38,14 +37,9 @@ func BatchInsert(db *gorm.DB, table string, data []map[string]interface{}) {
 			if stop > len(data) {
 				subset = data[i:len(data)]
 			}
-			postgresUtils.BatchInsert(
-				postgresClient,
-				"influx_bids2",
-				headers,
-				subset,
-			)
+			query := cmd + strings.Join(inserts, ",")
+			db.Exec(query, data...)
 		}(i)
-
 	}
 
 	wg.Wait()
@@ -60,8 +54,4 @@ func BatchInsert(db *gorm.DB, table string, data []map[string]interface{}) {
 	for i := 0; i < len(data)/len(columns); i++ {
 		inserts = append(inserts, row)
 	}
-
-	cmd += strings.Join(inserts, ",")
-
-	db.Exec(cmd, data...)
 }
