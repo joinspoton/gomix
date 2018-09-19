@@ -42,9 +42,10 @@ func BatchInsert(db *gorm.DB, table string, data []map[string]interface{}) {
 			defer wg.Done()
 
 			var inserts []string
-			for i := 0; i < len(batches[i]); i++ {
+			for j := 0; j < len(batches[i]); j++ {
 				inserts = append(inserts, row)
 			}
+
 			query := cmd + strings.Join(inserts, ",")
 
 			var values []interface{}
