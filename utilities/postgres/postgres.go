@@ -20,6 +20,12 @@ func BatchInsert(db *gorm.DB, table string, data []map[string]interface{}) {
 		i++
 	}
 
+	var placeholders []string
+	for i := 0; i < len(columns); i++ {
+		placeholders = append(placeholders, "?")
+	}
+	row := fmt.Sprintf("(%s)", strings.Join(placeholders, ","))
+
 	cmd := fmt.Sprintf(
 		"INSERT INTO %s(%s) VALUES ",
 		table,
@@ -32,8 +38,15 @@ func BatchInsert(db *gorm.DB, table string, data []map[string]interface{}) {
 	for i := 0; i < batches; i++ {
 		go func(i int) {
 			defer wg.Done()
+
+			var inserts []string
+			for i := 0; i < len(data)/len(columns); i++ {
+				inserts = append(inserts, row)
+			}
+
 			stop := i + 500*len(headers)
 			subset := data[i:stop]
+
 			if stop > len(data) {
 				subset = data[i:len(data)]
 			}
@@ -43,15 +56,4 @@ func BatchInsert(db *gorm.DB, table string, data []map[string]interface{}) {
 	}
 
 	wg.Wait()
-
-	var placeholders []string
-	for i := 0; i < len(columns); i++ {
-		placeholders = append(placeholders, "?")
-	}
-	row := fmt.Sprintf("(%s)", strings.Join(placeholders, ","))
-
-	var inserts []string
-	for i := 0; i < len(data)/len(columns); i++ {
-		inserts = append(inserts, row)
-	}
 }
