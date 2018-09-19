@@ -17,11 +17,9 @@ func BatchInsert(db *gorm.DB, table string, data []map[string]interface{}) {
 	}
 	batches = append(batches, data)
 
-	columns := make([]string, len(data))
-	i := 0
+	var columns []string
 	for k := range data[0] {
-		columns[i] = k
-		i++
+		columns = append(columns, k)
 	}
 
 	var placeholders []string
