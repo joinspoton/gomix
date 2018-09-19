@@ -8,7 +8,7 @@ import (
 )
 
 // BatchInsert - Since it is not officially supported in the GORM API
-func BatchInsert(db *gorm.DB, table string, data []map[string]interface{}) error {
+func BatchInsert(db *gorm.DB, table string, data []map[string]interface{}) {
 	batchSize := 500
 
 	columns := make([]string, len(data))
@@ -37,8 +37,5 @@ func BatchInsert(db *gorm.DB, table string, data []map[string]interface{}) error
 
 	cmd += strings.Join(inserts, ",")
 
-	if err := db.Exec(cmd, data...).Error; err != nil {
-		return err
-	}
-	return nil
+	db.Exec(cmd, data...)
 }
