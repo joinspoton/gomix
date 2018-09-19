@@ -11,7 +11,11 @@ import (
 // BatchInsert - Since it is not officially supported in the GORM API
 func BatchInsert(db *gorm.DB, table string, data []map[string]interface{}) {
 	batchSize := 500
-	batches := len(data)/batchSize + 1
+	var batches [][]map[string]interface{}
+	for batchSize < len(data) {
+		data, batches = data[batchSize:], append(batches, data[0:batchSize:batchSize])
+	}
+	batches = append(batches, data)
 
 	columns := make([]string, len(data))
 	i := 0
@@ -33,23 +37,23 @@ func BatchInsert(db *gorm.DB, table string, data []map[string]interface{}) {
 	)
 
 	var wg sync.WaitGroup
-	wg.Add(batches)
+	wg.Add(len(batches))
 
-	for i := 0; i < batches; i++ {
+	for i := 0; i < len(batches); i++ {
 		go func(i int) {
 			defer wg.Done()
+
+			subset := data[i:i]
 
 			var inserts []string
 			for i := 0; i < len(data)/len(columns); i++ {
 				inserts = append(inserts, row)
 			}
 
-			stop := i + 500*len(headers)
-			subset := data[i:stop]
-
 			if stop > len(data) {
 				subset = data[i:len(data)]
 			}
+
 			query := cmd + strings.Join(inserts, ",")
 			db.Exec(query, data...)
 		}(i)
