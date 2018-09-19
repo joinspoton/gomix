@@ -11,6 +11,13 @@ import (
 func BatchInsert(db *gorm.DB, table string, data []map[string]interface{}) error {
 	batchSize := 500
 
+	columns := make([]string, len(data))
+	i := 0
+	for k := range data[0] {
+		columns[i] = k
+		i++
+	}
+
 	cmd := fmt.Sprintf(
 		"INSERT INTO %s(%s) VALUES ",
 		table,
