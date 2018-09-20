@@ -69,3 +69,8 @@ func QueryMixpanel(query JQLQuery) (string, error) {
 	body, _ := ioutil.ReadAll(resp.Body)
 	return string(body), nil
 }
+
+//
+func RawJQLQuery(jql string) (string, error) {
+	return nil, nil
+}
