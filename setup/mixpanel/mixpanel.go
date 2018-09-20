@@ -69,3 +69,32 @@ func QueryMixpanel(query JQLQuery) (string, error) {
 	body, _ := ioutil.ReadAll(resp.Body)
 	return string(body), nil
 }
+
+// RawJQLQuery - Takes any parameters and JQL, pings MixPanel, and returns the result
+func RawJQLQuery(params string, script string) (string, error) {
+	mpSecret, err := paramstore.GetConfig("/production/mixpanel/secret/b64")
+	if err != nil {
+		return "", ErrorParameterStore
+	}
+
+	data := url.Values{}
+	if params != "" {
+		data.Set("params", params)
+	}
+	data.Set("script", script)
+
+	req, _ := http.NewRequest("POST", mpurl, strings.NewReader(data.Encode()))
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("authorization", "Basic "+mpSecret)
+
+	client := &http.Client{}
+	var response string
+	resp, err := client.Do(req)
+	if err != nil {
+		return response, err
+	}
+
+	defer resp.Body.Close()
+	body, _ := ioutil.ReadAll(resp.Body)
+	return string(body), nil
+}
