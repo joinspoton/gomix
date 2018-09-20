@@ -78,7 +78,9 @@ func RawJQLQuery(params string, script string) (string, error) {
 	}
 
 	data := url.Values{}
-	data.Set("params", params)
+	if params != "" {
+		data.Set("params", params)
+	}
 	data.Set("script", script)
 
 	req, _ := http.NewRequest("POST", mpurl, strings.NewReader(data.Encode()))
