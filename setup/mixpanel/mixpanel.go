@@ -72,7 +72,9 @@ func QueryMixpanel(query JQLQuery) (string, error) {
 
 // RawJQLQuery - Takes any parameters and JQL, pings MixPanel, and returns the result
 func RawJQLQuery(params string, script string) (string, error) {
+	fmt.Println("Getting paramstore.GetConfig(/production/mixpanel/secret/b64)")
 	mpSecret, err := paramstore.GetConfig("/production/mixpanel/secret/b64")
+	fmt.Println(mpSecret, err)
 	if err != nil {
 		return "", ErrorParameterStore
 	}
@@ -89,11 +91,12 @@ func RawJQLQuery(params string, script string) (string, error) {
 
 	client := &http.Client{}
 	var response string
+	fmt.Println("Before client.Do(req)")
 	resp, err := client.Do(req)
 	if err != nil {
 		return response, err
 	}
-
+	fmt.Print("After client.Do(req)")
 	defer resp.Body.Close()
 	body, _ := ioutil.ReadAll(resp.Body)
 	return string(body), nil
