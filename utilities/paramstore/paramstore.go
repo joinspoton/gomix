@@ -35,6 +35,8 @@ func GetConfig(key string) (string, error) {
 
 	ssmsvc := ssm.New(sess, aws.NewConfig().WithRegion("us-west-2"))
 	fmt.Printf("ssmsvc.ClientInfo: \n%+v\n", ssmsvc.ClientInfo)
+	d, _ := ssmsvc.Config.Credentials.Get()
+	fmt.Println("ssmsvc.Config.Credentials.Get()", d)
 	keyname := key
 	withDecryption := false
 	fmt.Println("Before ssmsvc.GetParameter()")
