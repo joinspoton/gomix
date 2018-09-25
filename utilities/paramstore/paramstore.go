@@ -20,6 +20,8 @@ func GetConfig(key string) (string, error) {
 	}
 
 	fmt.Println("key", key)
+	c, _ := sess.Config.Credentials.Get()
+	fmt.Println("sess.Config.Credentials.Get()", c)
 
 	// fmt.Println("Trying to request...")
 	// resp, err := http.Get("https://github.com/")
