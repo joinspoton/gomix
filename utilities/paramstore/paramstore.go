@@ -14,8 +14,8 @@ func GetConfig(key string) (string, error) {
 		Config:            aws.Config{Region: aws.String("us-west-2")},
 		SharedConfigState: session.SharedConfigEnable,
 	})
-	fmt.Println(sess)
 	if err != nil {
+		fmt.Println("error: ", err)
 		return "", err
 	}
 	ssmsvc := ssm.New(sess, aws.NewConfig().WithRegion("us-west-2"))
@@ -26,5 +26,6 @@ func GetConfig(key string) (string, error) {
 		WithDecryption: &withDecryption,
 	})
 	value := *param.Parameter.Value
+	fmt.Println("value", value)
 	return value, nil
 }
