@@ -38,6 +38,7 @@ func GetConfig(key string) (string, error) {
 		WithDecryption: &withDecryption,
 	})
 	fmt.Println("After ssmsvc.GetParameter()")
+	fmt.Println("param.GoString()", param.GoString())
 	value := *param.Parameter.Value
 	fmt.Println("value", value)
 	return value, nil
