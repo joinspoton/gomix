@@ -19,6 +19,8 @@ func GetConfig(key string) (string, error) {
 		return "", err
 	}
 
+	fmt.Println("key", key)
+
 	// fmt.Println("Trying to request...")
 	// resp, err := http.Get("https://github.com/")
 	// if err != nil {
