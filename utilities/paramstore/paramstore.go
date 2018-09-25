@@ -2,8 +2,6 @@ package paramstore
 
 import (
 	"fmt"
-	"io/ioutil"
-	"net/http"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -21,15 +19,15 @@ func GetConfig(key string) (string, error) {
 		return "", err
 	}
 
-	fmt.Println("Trying to request...")
-	resp, err := http.Get("https://github.com/")
-	if err != nil {
-		fmt.Println("Error!")
-	}
-	fmt.Println("After requesting...")
-	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
-	fmt.Println("body", string(body))
+	// fmt.Println("Trying to request...")
+	// resp, err := http.Get("https://github.com/")
+	// if err != nil {
+	// 	fmt.Println("Error!")
+	// }
+	// fmt.Println("After requesting...")
+	// defer resp.Body.Close()
+	// body, err := ioutil.ReadAll(resp.Body)
+	// fmt.Println("body", string(body))
 
 	ssmsvc := ssm.New(sess, aws.NewConfig().WithRegion("us-west-2"))
 	keyname := key
