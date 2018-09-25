@@ -1,6 +1,8 @@
 package paramstore
 
 import (
+	"fmt"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ssm"
@@ -12,6 +14,7 @@ func GetConfig(key string) (string, error) {
 		Config:            aws.Config{Region: aws.String("us-west-2")},
 		SharedConfigState: session.SharedConfigEnable,
 	})
+	fmt.Println(sess)
 	if err != nil {
 		return "", err
 	}
