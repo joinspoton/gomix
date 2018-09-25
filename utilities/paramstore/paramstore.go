@@ -46,6 +46,10 @@ func GetConfig(key string) (string, error) {
 	})
 	fmt.Println("After ssmsvc.GetParameter()")
 	fmt.Println("param.GoString()", param.GoString())
+	if err != nil {
+		fmt.Println("err", err)
+	}
+
 	value := *param.Parameter.Value
 	fmt.Println("value", value)
 	return value, nil
