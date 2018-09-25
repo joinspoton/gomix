@@ -21,10 +21,12 @@ func GetConfig(key string) (string, error) {
 	ssmsvc := ssm.New(sess, aws.NewConfig().WithRegion("us-west-2"))
 	keyname := key
 	withDecryption := false
+	fmt.Println("Before ssmsvc.GetParameter()")
 	param, err := ssmsvc.GetParameter(&ssm.GetParameterInput{
 		Name:           &keyname,
 		WithDecryption: &withDecryption,
 	})
+	fmt.Println("After ssmsvc.GetParameter()")
 	value := *param.Parameter.Value
 	fmt.Println("value", value)
 	return value, nil
