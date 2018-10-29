@@ -1,4 +1,4 @@
-package postgres
+package mongo
 
 import (
 	"fmt"
@@ -8,8 +8,9 @@ import (
 
 // ConnectToDB - Create a new mongo connection
 func ConnectToDB(server string, port string, db string, username string, password string) (*mgo.Database, error) {
-	session, err := mgo.Dial(server)
+	session, err := mgo.Dial(server + ":" + port + "/" + db)
 	var credentials mgo.Credential
+	session.SetSafe(&mgo.Safe{})
 	credentials.Username = username
 	credentials.Password = password
 	err = session.Login(&credentials)
