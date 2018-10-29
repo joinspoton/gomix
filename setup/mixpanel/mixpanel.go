@@ -183,7 +183,6 @@ func ReadMixpanelData(body []byte) []byte {
 
 			}
 			flag++
-			fmt.Println(flag)
 		}
 
 		if body[index] == 125 && body[index+1] == 125 && body[index+2] == 125 {
