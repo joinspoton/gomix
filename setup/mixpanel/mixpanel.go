@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"reflect"
 	"strings"
 
 	"github.com/joinspoton/gomix/utilities/paramstore"
@@ -105,7 +104,6 @@ func ReadMixpanelData(body []byte) []byte {
 	var newBody []byte
 	var flag = 0
 	var err error
-	fmt.Println(reflect.TypeOf(body))
 	for index, element := range body[:len(body)-3] {
 		if element == 123 {
 			openCount++
