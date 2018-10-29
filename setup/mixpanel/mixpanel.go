@@ -117,7 +117,7 @@ func ReadMixpanelData(body []byte) []byte {
 		}
 		if openCount >= 3 && element == 34 {
 			//subsqeunt open brackets
-			if flag == 0 {
+			if flag%3 == 0 {
 				newBody = append(newBody, byte(123))
 				var quoteCount = 0
 				var nameStart = index
@@ -180,17 +180,10 @@ func ReadMixpanelData(body []byte) []byte {
 				if body[countEnd+2] != 125 {
 					newBody = append(newBody, byte(44))
 				}
-				flag++
-			} else {
-				if flag == 1 {
-					flag = 2
-				} else if flag == 2 {
-					flag = 3
-				} else if flag == 3 {
-					flag = 0
-				}
 
 			}
+			flag++
+			fmt.Println(flag)
 		}
 
 		if body[index] == 125 && body[index+1] == 125 && body[index+2] == 125 {
