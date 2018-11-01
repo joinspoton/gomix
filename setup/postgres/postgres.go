@@ -19,11 +19,7 @@ func Connect(host string, port string, db string, username string, password stri
 }
 
 // BatchInsert - Since it is not officially supported in the GORM API
-func BatchInsert(db *gorm.DB, table string, data []map[string]interface{}) {
-	if len(data) <= 0 {
-		return
-	}
-
+func BatchInsert(db *gorm.DB, table string, data []map[string]interface{}, onConflict string) {
 	batchSize := 500
 	var batches [][]map[string]interface{}
 	for batchSize < len(data) {
@@ -67,6 +63,10 @@ func BatchInsert(db *gorm.DB, table string, data []map[string]interface{}) {
 				for _, column := range columns {
 					values = append(values, entry[column])
 				}
+			}
+
+			if onConflict != "" {
+				query += "\n" + onConflict
 			}
 
 			db.Exec(query, values...)
