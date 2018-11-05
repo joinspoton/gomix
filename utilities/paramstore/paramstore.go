@@ -22,7 +22,7 @@ func GetConfig(key string) (string, error) {
 
 	ssmsvc := ssm.New(sess, aws.NewConfig().WithRegion("us-west-2"))
 	keyname := key
-	withDecryption := false
+	withDecryption := true
 	param, err := ssmsvc.GetParameter(&ssm.GetParameterInput{
 		Name:           &keyname,
 		WithDecryption: &withDecryption,
