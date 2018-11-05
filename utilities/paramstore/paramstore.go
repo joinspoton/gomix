@@ -1,6 +1,7 @@
 package paramstore
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -32,4 +33,12 @@ func GetConfig(key string) (string, error) {
 	}
 	value := *param.Parameter.Value
 	return value, nil
+}
+
+// GetJSONConfig - Get a map[string]interface{} object from paramstore
+func GetJSONConfig(key string) (map[string]interface{}, error) {
+	jsonString, _ := GetConfig(key)
+	var config map[string]interface{}
+	json.Unmarshal([]byte(jsonString), &config)
+	return config, nil
 }
