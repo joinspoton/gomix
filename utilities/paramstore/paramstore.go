@@ -42,3 +42,11 @@ func GetJSONConfig(key string) (map[string]interface{}, error) {
 	json.Unmarshal([]byte(jsonString), &config)
 	return config, nil
 }
+
+// GetJSONArrayConfig - Get a []map[string]string object from paramstore
+func GetJSONArrayConfig(key string) ([]map[string]string, error) {
+	jsonString, _ := GetConfig(key)
+	var config []map[string]string
+	json.Unmarshal([]byte(jsonString), &config)
+	return config, nil
+}
