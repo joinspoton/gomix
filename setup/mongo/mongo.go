@@ -1,14 +1,21 @@
 package mongo
 
 import (
+	"strings"
 	"fmt"
 
 	"github.com/globalsign/mgo"
 )
 
 // ConnectToDB - Create a new mongo connection
-func ConnectToDB(server string, port string, db string, username string, password string) (*mgo.Database, error) {
-	session, err := mgo.Dial(server + ":" + port + "/" + db)
+func ConnectToDB(replicaSet []map[string]string, db string, username string, password string) (*mgo.Database, error) {
+	hostsArray := []string
+	for _, replica := range replicaSet {
+		hostsArray = append(hostsArray, replica["host"] + ":" + replica["port"])
+	}
+	hosts := strings.Join(hostsArray, ",")
+
+	session, err := mgo.Dial(fmt.Sprintf("mongodb://%s/%s", hosts, db))
 	var credentials mgo.Credential
 	session.SetSafe(&mgo.Safe{})
 	credentials.Username = username
