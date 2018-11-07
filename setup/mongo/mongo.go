@@ -18,7 +18,7 @@ func ConnectToDB() (*mgo.Database, error) {
 	username, _ := paramstore.GetConfig(path + "username")
 	password, _ := paramstore.GetConfig(path + "password")
 
-	return ManuallyConnect(
+	return ManuallyConnectToDB(
 		replicaSet,
 		name,
 		username,
