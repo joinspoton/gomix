@@ -22,7 +22,7 @@ func ConnectToDB() {
 		replicaSet,
 		name,
 		username,
-		password
+		password,
 	)
 }
 
