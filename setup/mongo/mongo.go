@@ -20,7 +20,7 @@ func Connect(database string) {
 
 	return ManuallyConnect(
 		replicaSet,
-		database,
+		name,
 		username,
 		password
 	)
