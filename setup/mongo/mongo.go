@@ -9,8 +9,8 @@ import (
 	"github.com/globalsign/mgo"
 )
 
-// Connect() - Create a new mongo connection without specifying credentials
-func Connect(database string) {
+// ConnectToDB() - Create a new mongo connection without specifying credentials
+func ConnectToDB() {
 	path := fmt.Sprintf("/%s/db/", system.GetEnv("stage", "staging"))
 
 	name, _ := paramstore.GetConfig(path + "name")
@@ -26,8 +26,8 @@ func Connect(database string) {
 	)
 }
 
-// ManuallyConnect - Create a new mongo connection
-func ManuallyConnect(replicaSet []map[string]string, db string, username string, password string) (*mgo.Database, error) {
+// ManuallyConnectToDB - Create a new mongo connection
+func ManuallyConnectToDB(replicaSet []map[string]string, db string, username string, password string) (*mgo.Database, error) {
 	var hostsArray []string
 	for _, replica := range replicaSet {
 		hostsArray = append(hostsArray, replica["host"]+":"+replica["port"])
