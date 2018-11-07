@@ -1,17 +1,17 @@
 package mongo
 
 import (
-	"strings"
 	"fmt"
+	"strings"
 
 	"github.com/globalsign/mgo"
 )
 
 // ConnectToDB - Create a new mongo connection
 func ConnectToDB(replicaSet []map[string]string, db string, username string, password string) (*mgo.Database, error) {
-	hostsArray := []string
+	var hostsArray []string
 	for _, replica := range replicaSet {
-		hostsArray = append(hostsArray, replica["host"] + ":" + replica["port"])
+		hostsArray = append(hostsArray, replica["host"]+":"+replica["port"])
 	}
 	hosts := strings.Join(hostsArray, ",")
 
