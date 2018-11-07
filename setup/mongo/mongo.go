@@ -10,7 +10,7 @@ import (
 )
 
 // ConnectToDB() - Create a new mongo connection without specifying credentials
-func ConnectToDB() {
+func ConnectToDB() (*mgo.Database, error) {
 	path := fmt.Sprintf("/%s/db/", system.GetEnv("stage", "staging"))
 
 	name, _ := paramstore.GetConfig(path + "name")
