@@ -2,14 +2,34 @@ package postgres
 
 import (
 	"fmt"
+	"gomix/utilities/paramstore"
+	"gomix/utilities/system"
 	"strings"
 	"sync"
 
 	"github.com/jinzhu/gorm"
 )
 
-// Connect - Create a new PostGreSQL connection
-func Connect(host string, port string, db string, username string, password string) (*gorm.DB, error) {
+// Connect - Create a new PostGreSQL connection without specifying credentials
+func Connect() (*gorm.DB, error) {
+	path := fmt.Sprintf("/%s/postgres/", system.GetEnv("stage", "staging"))
+
+	host, _ := paramstore.GetConfig(path + "host")
+	port, _ := paramstore.GetConfig(path + "port")
+	username, _ := paramstore.GetConfig(path + "username")
+	password, _ := paramstore.GetConfig(path + "password")
+
+	return ManuallyConnect(
+		host,
+		port,
+		"revenue",
+		username,
+		password,
+	)
+}
+
+// ManuallyConnect - Create a new PostGreSQL connection with specified credentials
+func ManuallyConnect(host string, port string, db string, username string, password string) (*gorm.DB, error) {
 	connection := fmt.Sprintf("host=%s port=%s dbname=%s user=%s password=%s", host, port, db, username, password)
 	client, err := gorm.Open("postgres", connection)
 	if err != nil {
