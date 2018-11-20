@@ -28,6 +28,42 @@ func Connect() (*gorm.DB, error) {
 	)
 }
 
+// ConnectToProd - Create a new PostGreSQL connection to Production Database
+func ConnectToProd() (*gorm.DB, error) {
+	path := "/production/postgres/"
+
+	host, _ := paramstore.GetConfig(path + "host")
+	port, _ := paramstore.GetConfig(path + "port")
+	username, _ := paramstore.GetConfig(path + "username")
+	password, _ := paramstore.GetConfig(path + "password")
+
+	return ManuallyConnect(
+		host,
+		port,
+		"revenue",
+		username,
+		password,
+	)
+}
+
+// ConnectToStaging - Create a new PostGreSQL connection to Staging Database
+func ConnectToStaging() (*gorm.DB, error) {
+	path := "/staging/postgres/"
+
+	host, _ := paramstore.GetConfig(path + "host")
+	port, _ := paramstore.GetConfig(path + "port")
+	username, _ := paramstore.GetConfig(path + "username")
+	password, _ := paramstore.GetConfig(path + "password")
+
+	return ManuallyConnect(
+		host,
+		port,
+		"revenue",
+		username,
+		password,
+	)
+}
+
 // ManuallyConnect - Create a new PostGreSQL connection with specified credentials
 func ManuallyConnect(host string, port string, db string, username string, password string) (*gorm.DB, error) {
 	connection := fmt.Sprintf("host=%s port=%s dbname=%s user=%s password=%s", host, port, db, username, password)
