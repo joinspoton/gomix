@@ -35,6 +35,22 @@ func Connect() (clnt client.Client, err error) {
 	)
 }
 
+// ConnectToProd - Create a new InfluxDB connection using production credentials
+func ConnectToProd() (clnt client.Client, err error) {
+	path := "/production/influx/"
+
+	host, _ := paramstore.GetConfig(path + "host")
+	port, _ := paramstore.GetConfig(path + "port")
+	username, _ := paramstore.GetConfig(path + "username")
+	password, _ := paramstore.GetConfig(path + "password")
+
+	return ManuallyConnect(
+		fmt.Sprintf("http://%s:%s", host, port),
+		username,
+		password,
+	)
+}
+
 // Connect6c4b - Create a new InfluxDB connection without credentials to ec2-34-216-111-45.us-west-2.compute.amazonaws.com
 func Connect6c4b() (clnt client.Client, err error) {
 	path := fmt.Sprintf("/%s/influx/6c4b/", system.GetEnv("stage", "staging"))
