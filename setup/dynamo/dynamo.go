@@ -24,7 +24,7 @@ func CreateItems(items []interface{}, table string) {
 	svc := getClient()
 
 	for _, item := range items {
-		av, _ := dynamodbattribute.MarshalMap(item)
+		av, err := dynamodbattribute.MarshalMap(item)
 		input := &dynamodb.PutItemInput{
 			Item:      av,
 			TableName: aws.String(table),
@@ -36,5 +36,7 @@ func CreateItems(items []interface{}, table string) {
 			fmt.Println(err.Error())
 			os.Exit(1)
 		}
+
+		fmt.Printf("Successfully added %+v to %s\n", item, table)
 	}
 }
