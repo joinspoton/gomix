@@ -1,9 +1,13 @@
 package dynamo
 
 import (
+	"fmt"
+	"os"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
+	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 )
 
 func getClient() *dynamodb.DynamoDB {
@@ -16,6 +20,21 @@ func getClient() *dynamodb.DynamoDB {
 }
 
 // CreateItems - insert items into a DynamoDB table
-func CreateItems(data []interface{}, table string) {
+func CreateItems(items []interface{}, table string) {
+	svc := getClient()
 
+	for _, item := range items {
+		av, _ := dynamodbattribute.MarshalMap(item)
+		input := &dynamodb.PutItemInput{
+			Item:      av,
+			TableName: aws.String(table),
+		}
+		_, err = svc.PutItem(input)
+
+		if err != nil {
+			fmt.Println("Got error calling PutItem:")
+			fmt.Println(err.Error())
+			os.Exit(1)
+		}
+	}
 }
