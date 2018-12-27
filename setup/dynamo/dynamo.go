@@ -14,3 +14,8 @@ func getClient() *dynamodb.DynamoDB {
 	// Create DynamoDB client
 	return dynamodb.New(sess)
 }
+
+// CreateItems - insert items into a DynamoDB table
+func CreateItems(data []interface{}, table string) {
+
+}
