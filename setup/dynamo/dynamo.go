@@ -3,6 +3,7 @@ package dynamo
 import (
 	"fmt"
 	"os"
+	"sync"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -23,20 +24,31 @@ func getClient() *dynamodb.DynamoDB {
 func CreateItems(items []interface{}, table string) {
 	svc := getClient()
 
-	for _, item := range items {
-		av, err := dynamodbattribute.MarshalMap(item)
-		input := &dynamodb.PutItemInput{
-			Item:      av,
-			TableName: aws.String(table),
-		}
-		_, err = svc.PutItem(input)
+	itemsLength := len(items)
+	var wg sync.WaitGroup
+	wg.Add(itemsLength)
 
-		if err != nil {
-			fmt.Println("Got error calling PutItem:")
-			fmt.Println(err.Error())
-			os.Exit(1)
-		}
+	for i := 0; i < itemsLength; i++ {
+		go func(i int) {
+			defer wg.Done()
+			item := items[i]
 
-		fmt.Printf("Successfully added %+v to %s\n", item, table)
+			av, err := dynamodbattribute.MarshalMap(item)
+			input := &dynamodb.PutItemInput{
+				Item:      av,
+				TableName: aws.String(table),
+			}
+			_, err = svc.PutItem(input)
+
+			if err != nil {
+				fmt.Println("Got error calling PutItem:")
+				fmt.Println(err.Error())
+				os.Exit(1)
+			}
+
+			fmt.Printf("Successfully added %+v to %s\n", item, table)
+		}(i)
 	}
+
+	wg.Wait()
 }
