@@ -22,6 +22,7 @@ func getClient() *dynamodb.DynamoDB {
 
 // CreateItems - insert items into a DynamoDB table
 func CreateItems(items []interface{}, table string) {
+	// TODO: Autogenerate primary key
 	svc := getClient()
 
 	itemsLength := len(items)
