@@ -2,6 +2,7 @@ package dynamo
 
 import (
 	"fmt"
+	"gomix/utilities/system"
 	"os"
 	"sync"
 
@@ -35,6 +36,9 @@ func CreateItems(items []interface{}, table string) {
 			item := items[i]
 
 			av, err := dynamodbattribute.MarshalMap(item)
+			id, _ := dynamodbattribute.Marshal(system.CreateUUID())
+			av["id"] = id
+
 			input := &dynamodb.PutItemInput{
 				Item:      av,
 				TableName: aws.String(table),
