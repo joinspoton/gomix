@@ -1,6 +1,10 @@
 package system
 
-import "os"
+import (
+	"os"
+
+	"github.com/satori/go.uuid"
+)
 
 // GetEnv - Get environment variable if it exists or else return fallback string
 func GetEnv(key, fallback string) string {
@@ -8,4 +12,9 @@ func GetEnv(key, fallback string) string {
 		return value
 	}
 	return fallback
+}
+
+// CreateUUID - Create UUID
+func CreateUUID() string {
+	return uuid.Must(uuid.NewV4()).String()
 }
