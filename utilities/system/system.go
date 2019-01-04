@@ -1,7 +1,6 @@
 package system
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/satori/go.uuid"
@@ -17,5 +16,5 @@ func GetEnv(key, fallback string) string {
 
 // CreateUUID - Create UUID
 func CreateUUID() string {
-	return uuid.Must(uuid.NewV4(), fmt.Errorf("Unable to create UUID")).String()
+	return uuid.Must(uuid.NewV4()).String()
 }
