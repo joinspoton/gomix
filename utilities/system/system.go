@@ -3,7 +3,7 @@ package system
 import (
 	"os"
 
-	"github.com/satori/go.uuid"
+	"github.com/gofrs/uuid"
 )
 
 // GetEnv - Get environment variable if it exists or else return fallback string
