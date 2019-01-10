@@ -9,7 +9,8 @@ type Event struct {
 	Description string
 	StartTime   time.Time
 	EndTime     time.Time
-	Price       float64
+	PriceMin    float64
+	PriceMax    float64
 	Currency    string
 	Longitude   float64
 	Latitude    float64
