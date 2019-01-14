@@ -74,7 +74,6 @@ func GetAllItems(table string) []map[string]interface{} {
 				item := make(map[string]interface{})
 				dynamodbattribute.UnmarshalMap(unmarshalItem, &item)
 				items = append(items, item)
-				fmt.Printf("Retrieved: %+v\n", item)
 			}
 			return !lastPage
 		})
