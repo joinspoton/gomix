@@ -59,7 +59,7 @@ func CreateItems(items []interface{}, table string) {
 }
 
 // GetAllItems - Retrive every items in a table
-func GetAllItems(table string) []interface{} {
+func GetAllItems(table string) []map[string]interface{} {
 	svc := getClient()
 
 	// Build the query input parameters
@@ -67,7 +67,7 @@ func GetAllItems(table string) []interface{} {
 		TableName: aws.String(table),
 	}
 
-	items := []interface{}{}
+	items := []map[string]interface{}{}
 	svc.ScanPages(params,
 		func(page *dynamodb.ScanOutput, lastPage bool) bool {
 			for _, unmarshalItem := range page.Items {
