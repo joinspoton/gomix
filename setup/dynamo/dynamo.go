@@ -57,3 +57,27 @@ func CreateItems(items []interface{}, table string) {
 
 	wg.Wait()
 }
+
+// GetAllItems - Retrive every items in a table
+func GetAllItems(table string) []interface{} {
+	svc := getClient()
+
+	// Build the query input parameters
+	params := &dynamodb.ScanInput{
+		TableName: aws.String(table),
+	}
+
+	items := []interface{}{}
+	svc.ScanPages(params,
+		func(page *dynamodb.ScanOutput, lastPage bool) bool {
+			for _, unmarshalItem := range page.Items {
+				item := make(map[string]interface{})
+				dynamodbattribute.UnmarshalMap(unmarshalItem, &item)
+				items = append(items, item)
+				fmt.Printf("Retrieved: %+v\n", item)
+			}
+			return !lastPage
+		})
+
+	return items
+}
