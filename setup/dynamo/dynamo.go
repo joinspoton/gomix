@@ -80,3 +80,16 @@ func GetAllItems(table string) []map[string]interface{} {
 
 	return items
 }
+
+// RemoveTable - Delete the table from dynamo (DeleteTable is a dynamo function)
+func RemoveTable(table string) error {
+	svc := getClient()
+
+	// Build the required object
+	var tableObj dynamodb.DeleteTableInput
+	tableObj.TableName = &table
+
+	svc.DeleteTable(&tableObj)
+
+	return nil
+}
