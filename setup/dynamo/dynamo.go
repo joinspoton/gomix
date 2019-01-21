@@ -93,3 +93,40 @@ func RemoveTable(table string) error {
 
 	return nil
 }
+
+// CreateTable - Create the table in dynamo with primary key
+func CreateTable(table string, primaryKeyName string, primaryKeyType string, readVal int64, writeVal int64) error {
+	var err error
+	err = nil
+	svc := getClient()
+
+	// Build the keys
+	var primaryKeyAttribute dynamodb.AttributeDefinition
+	var attributes []*dynamodb.AttributeDefinition
+	primaryKeyAttribute.AttributeName = &primaryKeyName
+	primaryKeyAttribute.AttributeType = &primaryKeyType
+	attributes = append(attributes, &primaryKeyAttribute)
+
+	// Indicate the primary key. HASH indicates it is a single primary key (RANGE for composite keys)
+	var test dynamodb.KeySchemaElement
+	data := "HASH"
+	test.AttributeName = &primaryKeyName
+	test.KeyType = &data
+	var keySchema []*dynamodb.KeySchemaElement
+	keySchema = append(keySchema, &test)
+
+	// Indicate throughputs
+	var throughput dynamodb.ProvisionedThroughput
+	throughput.ReadCapacityUnits = &readVal
+	throughput.WriteCapacityUnits = &writeVal
+
+	// Build the required object
+	var tableObj dynamodb.CreateTableInput
+	tableObj.TableName = &table
+	tableObj.AttributeDefinitions = attributes
+	tableObj.KeySchema = keySchema
+	tableObj.ProvisionedThroughput = &throughput
+
+	_, err = svc.CreateTable(&tableObj)
+	return err
+}
