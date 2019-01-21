@@ -130,3 +130,23 @@ func CreateTable(table string, primaryKeyName string, primaryKeyType string, rea
 	_, err = svc.CreateTable(&tableObj)
 	return err
 }
+
+// PollForTable - return true if table exists, else false
+func PollForTable(table string) (bool, error) {
+	var err error
+	err = nil
+	svc := getClient()
+
+	// Build the required object
+	var tableObj dynamodb.ListTablesInput
+	output, err := svc.ListTables(&tableObj)
+	if err != nil {
+		return false, err
+	}
+	for _, name := range output.TableNames {
+		if *name == table {
+			return true, nil
+		}
+	}
+	return false, nil
+}
