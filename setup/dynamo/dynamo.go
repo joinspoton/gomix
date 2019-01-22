@@ -22,7 +22,7 @@ func getClient() *dynamodb.DynamoDB {
 }
 
 // CreateItems - insert items into a DynamoDB table
-func CreateItems(items []interface{}, table string) {
+func CreateItems(items []interface{}, table string, primaryKey string) {
 	// TODO: Autogenerate primary key
 	svc := getClient()
 
@@ -37,7 +37,7 @@ func CreateItems(items []interface{}, table string) {
 
 			av, err := dynamodbattribute.MarshalMap(item)
 			id, _ := dynamodbattribute.Marshal(system.CreateUUID())
-			av["id"] = id
+			av[primaryKey] = id
 
 			input := &dynamodb.PutItemInput{
 				Item:      av,
