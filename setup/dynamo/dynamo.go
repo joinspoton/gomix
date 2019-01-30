@@ -105,23 +105,10 @@ func BatchCreateItems(items []interface{}, table string, primaryKey string) {
 				},
 			}
 
-			result, err := svc.BatchWriteItem(input)
+			_, err := svc.BatchWriteItem(input)
 			if err != nil {
 				panic(err)
 			}
-
-			fmt.Println(result)
-
-			// av, _ := dynamodbattribute.MarshalMap(item)
-
-			// id, _ := dynamodbattribute.Marshal(system.CreateUUID())
-			// av[primaryKey] = id
-
-			// input := &dynamodb.PutItemInput{
-			// 	Item:      av,
-			// 	TableName: aws.String(table),
-			// }
-
 		}(i)
 	}
 
