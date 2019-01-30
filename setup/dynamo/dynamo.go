@@ -86,11 +86,31 @@ func BatchCreateItems(items []interface{}, table string, primaryKey string) {
 
 			request := []*dynamodb.WriteRequest{}
 
+			for _, item := range batch {
+				av, _ := dynamodbattribute.MarshalMap(item)
+				id, _ := dynamodbattribute.Marshal(system.CreateUUID())
+				av[primaryKey] = id
+
+				requestToAdd := dynamodb.WriteRequest{}
+				putRequest := &dynamodb.PutRequest{
+					Item: av,
+				}
+				requestToAdd.PutRequest = putRequest
+				request = append(request, &requestToAdd)
+			}
+
 			input := &dynamodb.BatchWriteItemInput{
 				RequestItems: map[string][]*dynamodb.WriteRequest{
 					table: request,
 				},
 			}
+
+			result, err := svc.BatchWriteItem(input)
+			if err != nil {
+				panic(err)
+			}
+
+			fmt.Println(result)
 
 			// av, _ := dynamodbattribute.MarshalMap(item)
 
