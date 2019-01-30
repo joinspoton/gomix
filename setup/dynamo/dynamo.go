@@ -23,7 +23,6 @@ func getClient() *dynamodb.DynamoDB {
 
 // CreateItems - insert items into a DynamoDB table
 func CreateItems(items []interface{}, table string, primaryKey string) {
-	// TODO: Autogenerate primary key
 	svc := getClient()
 
 	itemsLength := len(items)
@@ -58,6 +57,51 @@ func CreateItems(items []interface{}, table string, primaryKey string) {
 				fmt.Printf("%+v\n", av)
 				os.Exit(1)
 			}
+		}(i)
+	}
+
+	wg.Wait()
+}
+
+// BatchCreateItems - batch insert items into a DynamoDB table
+// reference: https://docs.aws.amazon.com/sdk-for-go/api/service/dynamodb/#DynamoDB.BatchWriteItem
+func BatchCreateItems(items []interface{}, table string, primaryKey string) {
+	svc := getClient()
+
+	batchSize := 25
+	var batches [][]interface{}
+	for batchSize < len(items) {
+		items, batches = items[batchSize:], append(batches, items[0:batchSize:batchSize])
+	}
+	batches = append(batches, items)
+
+	batchesLength := len(batches)
+	var wg sync.WaitGroup
+	wg.Add(batchesLength)
+
+	for i := 0; i < batchesLength; i++ {
+		go func(i int) {
+			defer wg.Done()
+			batch := batches[i]
+
+			request := []*dynamodb.WriteRequest{}
+
+			input := &dynamodb.BatchWriteItemInput{
+				RequestItems: map[string][]*dynamodb.WriteRequest{
+					table: request,
+				},
+			}
+
+			// av, _ := dynamodbattribute.MarshalMap(item)
+
+			// id, _ := dynamodbattribute.Marshal(system.CreateUUID())
+			// av[primaryKey] = id
+
+			// input := &dynamodb.PutItemInput{
+			// 	Item:      av,
+			// 	TableName: aws.String(table),
+			// }
+
 		}(i)
 	}
 
