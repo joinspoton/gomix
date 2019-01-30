@@ -36,6 +36,13 @@ func CreateItems(items []interface{}, table string, primaryKey string) {
 			item := items[i]
 
 			av, err := dynamodbattribute.MarshalMap(item)
+			if err != nil {
+				fmt.Println("Got error Marshalling item:")
+				fmt.Println(err.Error())
+				fmt.Printf("%+v\n", item)
+				os.Exit(1)
+			}
+
 			id, _ := dynamodbattribute.Marshal(system.CreateUUID())
 			av[primaryKey] = id
 
@@ -48,10 +55,9 @@ func CreateItems(items []interface{}, table string, primaryKey string) {
 			if err != nil {
 				fmt.Println("Got error calling PutItem:")
 				fmt.Println(err.Error())
+				fmt.Printf("%+v\n", av)
 				os.Exit(1)
 			}
-
-			fmt.Printf("Successfully added %+v to %s\n", item, table)
 		}(i)
 	}
 
