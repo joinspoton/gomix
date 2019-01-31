@@ -65,6 +65,7 @@ func CreateItems(items []interface{}, table string, primaryKey string) {
 
 // BatchCreateItems - batch insert items into a DynamoDB table
 // reference: https://docs.aws.amazon.com/sdk-for-go/api/service/dynamodb/#DynamoDB.BatchWriteItem
+// If this errors out a lot, change the Capacity ASG for reads and writes
 func BatchCreateItems(items []interface{}, table string, primaryKey string) {
 	svc := getClient()
 
@@ -80,9 +81,13 @@ func BatchCreateItems(items []interface{}, table string, primaryKey string) {
 	wg.Add(batchesLength)
 
 	for i := 0; i < batchesLength; i++ {
+		// time.Sleep(50 * time.Millisecond)
+
 		go func(i int) {
 			defer wg.Done()
 			batch := batches[i]
+
+			fmt.Println(i, "|", batchesLength-1, "|", len(batch))
 
 			request := []*dynamodb.WriteRequest{}
 
@@ -113,6 +118,8 @@ func BatchCreateItems(items []interface{}, table string, primaryKey string) {
 	}
 
 	wg.Wait()
+
+	fmt.Println("done")
 }
 
 // GetAllItems - Retrive every items in a table
