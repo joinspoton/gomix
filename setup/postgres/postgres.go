@@ -11,7 +11,7 @@ import (
 )
 
 // Connect - Create a new PostGreSQL connection without specifying credentials
-func Connect() (*gorm.DB, error) {
+func Connect(db string) (*gorm.DB, error) {
 	path := fmt.Sprintf("/%s/postgres/", system.GetEnv("stage", "staging"))
 
 	host, _ := paramstore.GetConfig(path + "host")
@@ -22,14 +22,14 @@ func Connect() (*gorm.DB, error) {
 	return ManuallyConnect(
 		host,
 		port,
-		"revenue",
+		db,
 		username,
 		password,
 	)
 }
 
 // ConnectToProd - Create a new PostGreSQL connection to Production Database
-func ConnectToProd() (*gorm.DB, error) {
+func ConnectToProd(db string) (*gorm.DB, error) {
 	path := "/production/postgres/"
 
 	host, _ := paramstore.GetConfig(path + "host")
@@ -40,14 +40,14 @@ func ConnectToProd() (*gorm.DB, error) {
 	return ManuallyConnect(
 		host,
 		port,
-		"revenue",
+		db,
 		username,
 		password,
 	)
 }
 
 // ConnectToStaging - Create a new PostGreSQL connection to Staging Database
-func ConnectToStaging() (*gorm.DB, error) {
+func ConnectToStaging(db string) (*gorm.DB, error) {
 	path := "/staging/postgres/"
 
 	host, _ := paramstore.GetConfig(path + "host")
@@ -58,7 +58,7 @@ func ConnectToStaging() (*gorm.DB, error) {
 	return ManuallyConnect(
 		host,
 		port,
-		"revenue",
+		db,
 		username,
 		password,
 	)
