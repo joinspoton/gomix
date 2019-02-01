@@ -12,6 +12,7 @@ type Event struct {
 	PriceMin    float64
 	PriceMax    float64
 	Currency    string
+	Address     string
 	Longitude   float64
 	Latitude    float64
 	City        string
