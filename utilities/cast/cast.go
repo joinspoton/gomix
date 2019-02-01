@@ -1,13 +1,24 @@
 package cast
 
-func GetBoolOrNull(value interface{}) {
-
+// GetBoolOrNull - Type asserts and returns the value as a boolean
+func GetBoolOrNull(value interface{}) bool {
+	b, ok := value.(bool)
+	if !ok {
+		return false
+	}
+	return b
 }
 
-func GetStringOrNull(value interface{}) {
-
+// GetStringOrNull - Type asserts and returns the value as a string
+func GetStringOrNull(value interface{}) string {
+	s, ok := value.(string)
+	if !ok {
+		return ""
+	}
+	return s
 }
 
-func GetFloatOrNull(value interface{}) {
+// GetFloat64OrNull - Type asserts and returns the value as a float64
+func GetFloat64OrNull(value interface{}) float64 {
 
 }
