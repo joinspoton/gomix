@@ -20,5 +20,9 @@ func GetStringOrNull(value interface{}) string {
 
 // GetFloat64OrNull - Type asserts and returns the value as a float64
 func GetFloat64OrNull(value interface{}) float64 {
-
+	f, ok := value.(float64)
+	if !ok {
+		return 0
+	}
+	return f
 }
