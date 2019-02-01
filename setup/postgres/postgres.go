@@ -182,14 +182,14 @@ func BatchStructsInsert(db *gorm.DB, table string, objArr []interface{}) {
 			mainScope.SQLVars = append(mainScope.SQLVars, scope.SQLVars...)
 		}
 
-		mainScope.Raw(fmt.Sprintf("INSERT INTO %s (%s) VALUES %s",
+		mainScope.Raw(fmt.Sprintf("INSERT INTO %s(%s) VALUES %s",
 			table,
 			strings.Join(quoted, ", "),
 			strings.Join(placeholdersArr, ", "),
 		))
 
 		if _, err := mainScope.SQLDB().Exec(mainScope.SQL, mainScope.SQLVars...); err != nil {
-			fmt.Printf("%+v\n", mainScope)
+			fmt.Printf("%+v\n", mainScope.SQLVars)
 			panic(err)
 		}
 	}
