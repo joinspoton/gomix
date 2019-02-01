@@ -1,5 +1,13 @@
 package cast
 
-func GetValueOrNull(value interface{}, d type) {
+func GetBoolOrNull(value interface{}) {
+
+}
+
+func GetStringOrNull(value interface{}) {
+
+}
+
+func GetFloatOrNull(value interface{}) {
 
 }
