@@ -137,10 +137,10 @@ func BatchInsert(db *gorm.DB, table string, data []map[string]interface{}, onCon
 }
 
 // BatchStructsInsert - Insert an array of structs into a table
-func BatchStructsInsert(db *gorm.DB, table string, objArr []interface{}) error {
+func BatchStructsInsert(db *gorm.DB, table string, objArr []interface{}) {
 	// If there is no data, nothing to do.
 	if len(objArr) == 0 {
-		return nil
+		return
 	}
 
 	mainObj := objArr[0]
@@ -181,7 +181,6 @@ func BatchStructsInsert(db *gorm.DB, table string, objArr []interface{}) error {
 	))
 
 	if _, err := mainScope.SQLDB().Exec(mainScope.SQL, mainScope.SQLVars...); err != nil {
-		return err
+		panic(err)
 	}
-	return nil
 }
