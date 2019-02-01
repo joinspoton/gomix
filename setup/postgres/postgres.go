@@ -189,6 +189,7 @@ func BatchStructsInsert(db *gorm.DB, table string, objArr []interface{}) {
 		))
 
 		if _, err := mainScope.SQLDB().Exec(mainScope.SQL, mainScope.SQLVars...); err != nil {
+			fmt.Printf("%+v\n", mainScope)
 			panic(err)
 		}
 	}
