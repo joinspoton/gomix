@@ -17,4 +17,6 @@ type Event struct {
 	Latitude    float64
 	City        string
 	Country     string
+	Tags        string
+	ImageURL    string
 }
