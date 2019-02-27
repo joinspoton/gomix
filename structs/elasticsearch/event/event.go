@@ -1,6 +1,9 @@
 package event
 
-import "time"
+import (
+	"fmt"
+	"time"
+)
 
 // Event - Structure and standardize raw events from different vendors
 type Event struct {
@@ -19,4 +22,24 @@ type Event struct {
 	Country     string
 	Tags        string
 	ImageURL    string
+}
+
+// AddDefaultValues - Give the event default values
+func AddDefaultValues(event *Event) {
+	fmt.Println("HI")
+	event.Vendor = ""
+	event.Name = ""
+	event.Description = ""
+	event.Currency = "USD"
+	event.StartTime = time.Time{}
+	event.EndTime = time.Time{}
+	event.PriceMin = float64(10000001)
+	event.PriceMax = float64(0)
+	event.City = ""
+	event.Country = ""
+	event.Longitude = float64(0)
+	event.Latitude = float64(0)
+	event.ImageURL = ""
+	event.Tags = ""
+	fmt.Println(event)
 }
