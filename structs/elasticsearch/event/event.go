@@ -26,14 +26,13 @@ type Event struct {
 
 // AddDefaultValues - Give the event default values
 func AddDefaultValues(event *Event) {
-	fmt.Println("HI")
 	event.Vendor = ""
 	event.Name = ""
 	event.Description = ""
 	event.Currency = "USD"
 	event.StartTime = time.Time{}
 	event.EndTime = time.Time{}
-	event.PriceMin = float64(10000001)
+	event.PriceMin = float64(0)
 	event.PriceMax = float64(0)
 	event.City = ""
 	event.Country = ""
